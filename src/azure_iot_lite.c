@@ -3,7 +3,6 @@
 
 #include "azure_iot_lite.h"
 
-
 #pragma region certs
 const char certificates[] =
 /* DigiCert Baltimore Root */
@@ -115,23 +114,7 @@ const char certificates[] =
 
 #pragma endregion
 
-
-
-const tDevice Device = {
-	.create = device_type_create,
-	.destroy = device_type_destroy,
-};
-
-void message_ack(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userContextCallback)
-{
-	struct ack* ack = (struct ack*)userContextCallback;
-
-	ack->device->on_ack(ack->device, result == IOTHUB_CLIENT_CONFIRMATION_OK, ack->message_Id);
-
-	free(ack->message_Id);
-	free(ack);
-}
-
+#pragma region helpers
 void LogError(char * log)
 {
 	printf(log);
@@ -163,7 +146,13 @@ const IOTHUB_CLIENT_TRANSPORT_PROVIDER Default_Protocol(void)
 	//hardcoded to amqp for now
 	return AMQP_Protocol;
 }
+#pragma endregion
 
+#pragma region device_type
+const tDevice Device = {
+	.create = device_type_create,
+	.destroy = device_type_destroy,
+};
 
 struct device *device_type_create(char *connectionString) {
 
@@ -204,6 +193,7 @@ struct device *device_type_create(char *connectionString) {
 	result->message_properties = message_properties;
 
 	result->post_message = device_post_message;
+	result->send_message = device_send_message;
 
 	result->set_message_property = device_set_message_property;
 	result->set_system_property = device_set_system_property;
@@ -232,8 +222,19 @@ void *device_type_destroy(struct device * device) {
 	free(device);
 	return 0;
 }
+#pragma endregion
 
-IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message) {
+void message_ack(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userContextCallback)
+{
+	struct ack* ack = (struct ack*)userContextCallback;
+
+	ack->device->on_ack(ack->device, result == IOTHUB_CLIENT_CONFIRMATION_OK, ack->message_Id);
+
+	free(ack->message_Id);
+	free(ack);
+}
+
+IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, char **message_id) {
 
 	bool res = true;
 
@@ -257,15 +258,23 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message) {
 	bool has_key = false;
 	if (Map_ContainsKey(self->message_properties, MESSAGE_ID, &has_key) == MAP_OK && !has_key)
 	{
-		char *message_id = New_Uid();
-		Map_Add(self->message_properties, MESSAGE_ID, message_id);
-		free(message_id);
+		char *msg_id = New_Uid();
+		if (IoTHubMessage_SetMessageId(message_handle, msg_id) != IOTHUB_MESSAGE_OK)
+		{
+			LogError("failed setting the MESSAGE_ID.");
+			return IOTHUB_MESSAGE_ERROR;
+		}
+		free(msg_id);
 	}
 
 	if (Map_ContainsKey(self->message_properties, CORRELATION_ID, &has_key) == MAP_OK && !has_key)
 	{
 		char *correlation_id = New_Uid();
-		Map_Add(self->message_properties, CORRELATION_ID, correlation_id);
+		if (IoTHubMessage_SetCorrelationId(message_handle, correlation_id) != IOTHUB_MESSAGE_OK)
+		{
+			LogError("failed setting the CORRELATION_ID.");
+			return IOTHUB_MESSAGE_ERROR;
+		}
 		free(correlation_id);
 	}
 
@@ -307,23 +316,49 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message) {
 			}
 	}
 
-	time_t rawtime;
-	time(&rawtime);
 	char strTime[50];
-	sprintf(strTime, "%d", (int)rawtime);
+	time_t rawtime;
 
 	const char *message_Id = IoTHubMessage_GetMessageId(message_handle);
-	Map_AddOrUpdate(self->message_pending_acks, message_Id, strTime);
-	struct ack* ack = (struct ack*) malloc(sizeof(struct ack));
 
+	time(&rawtime);
+	sprintf(strTime, "%d", (int)rawtime);
+
+	Map_AddOrUpdate(self->message_pending_acks, message_Id, strTime);
+	
+	struct ack* ack = (struct ack*) malloc(sizeof(struct ack));
 	ack->device = self;
 	mallocAndStrcpy_s(&(ack->message_Id), (char *)message_Id);
+
+	if (message_id)
+		*message_id = ack->message_Id;
 
 	IoTHubClient_LL_SendEventAsync(self->iothub_ll_handle, message_handle, message_ack, (void *)ack);
 
 	IoTHubMessage_Destroy(message_handle);
 
 	return IOTHUB_MESSAGE_OK;
+}
+
+IOTHUB_MESSAGE_RESULT device_send_message(struct device *self, char *message)
+{
+	char* message_id;
+	IOTHUB_MESSAGE_RESULT result = self->post_message(self, message, &message_id);
+	if (result != IOTHUB_MESSAGE_OK)
+	{
+		LogError("Failed to post message");
+		return result;
+	}
+
+	while (self->wait_for_ack(self, message_id)) {
+
+		//flush the upstream/downstream network buffers
+		self->flush(self);
+
+		//wait for the server to ack
+		ThreadAPI_Sleep(1);
+	}
+	return result;
 }
 
 void device_on_ack(struct device* self, bool success, char* message_id)
@@ -353,10 +388,11 @@ bool device_wait_for_all_acks(struct device* self)
 		return IOTHUB_MESSAGE_ERROR;
 	}
 
+	time_t now;
+	time(&now);
+	
 	for (size_t i = 0; i < propertyCount; i++)
 	{
-		time_t now;
-		time(&now);
 		time_t message_sent = (time_t)atoi(propertyValues[i]);
 		if (now - message_sent < ACK_TIMEOUT)
 			return true;
@@ -368,11 +404,17 @@ bool device_wait_for_all_acks(struct device* self)
 bool device_wait_for_ack(struct device* self, char* message_id)
 {
 	bool key_exists = false;
+
 	if (message_id && Map_ContainsKey(self->message_pending_acks, message_id, &key_exists) != MAP_OK || key_exists)
 	{
-		const char* value = Map_GetValueFromKey(self->message_pending_acks, message_id);				
-		value;
-		return true;
+		time_t now;
+		time(&now);
+
+		const char* value = Map_GetValueFromKey(self->message_pending_acks, message_id);
+		time_t message_sent = (time_t)atoi(value);
+		if (now - message_sent < ACK_TIMEOUT)
+			return true;
+		
 	}
 	return false;
 }
