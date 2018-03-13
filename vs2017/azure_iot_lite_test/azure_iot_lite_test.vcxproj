@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{23C2EFEA-2CC0-3541-B3E8-38B4E12CF2D2}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>azure_iot_lite_test</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\dist\windows\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\samples\iothub_ll_telemetry_sample\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">iothub_ll_telemetry_sample.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">iothub_ll_telemetry_sample</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\samples\iothub_ll_telemetry_sample\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">iothub_ll_telemetry_sample.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">iothub_ll_telemetry_sample</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\samples\iothub_ll_telemetry_sample\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">iothub_ll_telemetry_sample.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">iothub_ll_telemetry_sample</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\inc</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4232</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ARCHITECTURE_x86=1;GB_MEASURE_MEMORY_FOR_THIS;GB_DEBUG_ALLOC;USE_HTTP;USE_AMQP;USE_MQTT;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ARCHITECTURE_x86=1;GB_MEASURE_MEMORY_FOR_THIS;GB_DEBUG_ALLOC;USE_HTTP;USE_AMQP;USE_MQTT;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>azure_iot_lite.lib;rpcrt4.lib;crypt32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\dist\windows\azure_iot_lite\Debug</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>
+      </ImportLibrary>
+      <ProgramDataBaseFile>
+      </ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4232</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;ARCHITECTURE_x86=1;GB_MEASURE_MEMORY_FOR_THIS;GB_DEBUG_ALLOC;USE_HTTP;USE_AMQP;USE_MQTT;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;ARCHITECTURE_x86=1;GB_MEASURE_MEMORY_FOR_THIS;GB_DEBUG_ALLOC;USE_HTTP;USE_AMQP;USE_MQTT;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\..\Release\iothub_client.lib;..\..\Release\iothub_client_http_transport.lib;..\..\Release\iothub_client_amqp_transport.lib;..\..\Release\iothub_client_amqp_ws_transport.lib;..\..\..\uamqp\Release\uamqp.lib;..\..\..\c-utility\Release\aziotsharedutil.lib;ws2_32.lib;secur32.lib;..\..\Release\iothub_client_mqtt_transport.lib;..\..\Release\iothub_client_mqtt_ws_transport.lib;..\..\..\umqtt\Release\umqtt.lib;..\..\..\c-utility\Release\aziotsharedutil.lib;crypt32.lib;winhttp.lib;crypt32.lib;winhttp.lib;ws2_32.lib;secur32.lib;advapi32.lib;ncrypt.lib;rpcrt4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/work/oss/azure-iot-sdk-c/cmake/iothub_client/samples/iothub_ll_telemetry_sample/Release/iothub_ll_telemetry_sample.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/work/oss/azure-iot-sdk-c/cmake/iothub_client/samples/iothub_ll_telemetry_sample/Release/iothub_ll_telemetry_sample.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4232</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;ARCHITECTURE_x86=1;GB_MEASURE_MEMORY_FOR_THIS;GB_DEBUG_ALLOC;USE_HTTP;USE_AMQP;USE_MQTT;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;ARCHITECTURE_x86=1;GB_MEASURE_MEMORY_FOR_THIS;GB_DEBUG_ALLOC;USE_HTTP;USE_AMQP;USE_MQTT;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\..\MinSizeRel\iothub_client.lib;..\..\MinSizeRel\iothub_client_http_transport.lib;..\..\MinSizeRel\iothub_client_amqp_transport.lib;..\..\MinSizeRel\iothub_client_amqp_ws_transport.lib;..\..\..\uamqp\MinSizeRel\uamqp.lib;..\..\..\c-utility\MinSizeRel\aziotsharedutil.lib;ws2_32.lib;secur32.lib;..\..\MinSizeRel\iothub_client_mqtt_transport.lib;..\..\MinSizeRel\iothub_client_mqtt_ws_transport.lib;..\..\..\umqtt\MinSizeRel\umqtt.lib;..\..\..\c-utility\MinSizeRel\aziotsharedutil.lib;crypt32.lib;winhttp.lib;crypt32.lib;winhttp.lib;ws2_32.lib;secur32.lib;advapi32.lib;ncrypt.lib;rpcrt4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/work/oss/azure-iot-sdk-c/cmake/iothub_client/samples/iothub_ll_telemetry_sample/MinSizeRel/iothub_ll_telemetry_sample.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/work/oss/azure-iot-sdk-c/cmake/iothub_client/samples/iothub_ll_telemetry_sample/MinSizeRel/iothub_ll_telemetry_sample.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4232</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;ARCHITECTURE_x86=1;GB_MEASURE_MEMORY_FOR_THIS;GB_DEBUG_ALLOC;USE_HTTP;USE_AMQP;USE_MQTT;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;ARCHITECTURE_x86=1;GB_MEASURE_MEMORY_FOR_THIS;GB_DEBUG_ALLOC;USE_HTTP;USE_AMQP;USE_MQTT;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\work\oss\azure-iot-sdk-c\c-utility\inc;C:\work\oss\azure-iot-sdk-c\c-utility\pal\windows;C:\work\oss\azure-iot-sdk-c\iothub_client\..\deps\parson;C:\work\oss\azure-iot-sdk-c\deps\uhttp\deps\c-utility\inc;C:\work\oss\azure-iot-sdk-c\iothub_client\inc;C:\work\oss\azure-iot-sdk-c\uamqp\inc;C:\work\oss\azure-iot-sdk-c\umqtt\inc;C:\work\oss\azure-iot-sdk-c\certs;C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\..\RelWithDebInfo\iothub_client.lib;..\..\RelWithDebInfo\iothub_client_http_transport.lib;..\..\RelWithDebInfo\iothub_client_amqp_transport.lib;..\..\RelWithDebInfo\iothub_client_amqp_ws_transport.lib;..\..\..\uamqp\RelWithDebInfo\uamqp.lib;..\..\..\c-utility\RelWithDebInfo\aziotsharedutil.lib;ws2_32.lib;secur32.lib;..\..\RelWithDebInfo\iothub_client_mqtt_transport.lib;..\..\RelWithDebInfo\iothub_client_mqtt_ws_transport.lib;..\..\..\umqtt\RelWithDebInfo\umqtt.lib;..\..\..\c-utility\RelWithDebInfo\aziotsharedutil.lib;crypt32.lib;winhttp.lib;crypt32.lib;winhttp.lib;ws2_32.lib;secur32.lib;advapi32.lib;ncrypt.lib;rpcrt4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/work/oss/azure-iot-sdk-c/cmake/iothub_client/samples/iothub_ll_telemetry_sample/RelWithDebInfo/iothub_ll_telemetry_sample.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/work/oss/azure-iot-sdk-c/cmake/iothub_client/samples/iothub_ll_telemetry_sample/RelWithDebInfo/iothub_ll_telemetry_sample.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\ZERO_CHECK.vcxproj">
+      <Project>{BF7C3419-A23F-30D3-894F-23CBD9365789}</Project>
+      <Name>ZERO_CHECK</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\c-utility\aziotsharedutil.vcxproj">
+      <Project>{4A7E73FB-C403-3F84-A689-A7372977C4F6}</Project>
+      <Name>aziotsharedutil</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client.vcxproj">
+      <Project>{C2950F8F-09A0-373C-A52D-70C998718A46}</Project>
+      <Name>iothub_client</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_amqp_transport.vcxproj">
+      <Project>{48102243-4A21-35BF-81EB-8F9F5855AAAA}</Project>
+      <Name>iothub_client_amqp_transport</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_amqp_ws_transport.vcxproj">
+      <Project>{4827D21B-CEE1-3399-88F1-CC4C43284E30}</Project>
+      <Name>iothub_client_amqp_ws_transport</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_http_transport.vcxproj">
+      <Project>{D2C372FB-73D0-358B-B3FB-D1241B46B31E}</Project>
+      <Name>iothub_client_http_transport</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_mqtt_transport.vcxproj">
+      <Project>{A1C038E9-1865-38F2-9591-587F21CA60D7}</Project>
+      <Name>iothub_client_mqtt_transport</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_mqtt_ws_transport.vcxproj">
+      <Project>{EE57F64E-F446-3B93-9190-CA84F4DE6B8D}</Project>
+      <Name>iothub_client_mqtt_ws_transport</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\uamqp\uamqp.vcxproj">
+      <Project>{1DCCAB97-7715-34CE-BEA6-F52D5E68A4B6}</Project>
+      <Name>uamqp</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\umqtt\umqtt.vcxproj">
+      <Project>{001830A6-8562-3A6B-BE59-DA31B22EA3BC}</Project>
+      <Name>umqtt</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\tests\azure_iot_lite_test.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Microsoft.Azure.C.SharedUtility.1.1.0\build\native\Microsoft.Azure.C.SharedUtility.targets" Condition="Exists('..\packages\Microsoft.Azure.C.SharedUtility.1.1.0\build\native\Microsoft.Azure.C.SharedUtility.targets')" />
+    <Import Project="..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.0\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets" Condition="Exists('..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.0\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets')" />
+    <Import Project="..\packages\Microsoft.Azure.uamqp.1.1.0\build\native\Microsoft.Azure.uamqp.targets" Condition="Exists('..\packages\Microsoft.Azure.uamqp.1.1.0\build\native\Microsoft.Azure.uamqp.targets')" />
+    <Import Project="..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.0\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets" Condition="Exists('..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.0\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.C.SharedUtility.1.1.0\build\native\Microsoft.Azure.C.SharedUtility.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.C.SharedUtility.1.1.0\build\native\Microsoft.Azure.C.SharedUtility.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.0\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.0\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.uamqp.1.1.0\build\native\Microsoft.Azure.uamqp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.uamqp.1.1.0\build\native\Microsoft.Azure.uamqp.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.0\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.0\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets'))" />
+  </Target>
+</Project>

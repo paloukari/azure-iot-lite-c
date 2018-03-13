@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\iothub_ll_telemetry_sample.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\work\oss\azure-iot-sdk-c\certs\certs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\work\oss\azure-iot-sdk-c\iothub_client\samples\iothub_ll_telemetry_sample\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0BA95081-2DBA-343C-B6C7-46027A27AB10}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
