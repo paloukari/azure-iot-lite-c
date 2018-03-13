@@ -1,0 +1,14 @@
+#ifndef AZURE_IOTHUB_LITE_H
+#define AZURE_IOTHUB_LITE_H
+
+#define IOTHUB_SDK_VERSION "0.1.0"
+
+#include <stddef.h>
+#include <stdint.h>
+
+#ifndef IOTHUB_CLIENT_INSTANCE_TYPE
+typedef struct IOTHUB_CLIENT_INSTANCE_TAG* IOTHUB_CLIENT_HANDLE;
+#define IOTHUB_CLIENT_INSTANCE_TYPE
+#endif // IOTHUB_CLIENT_INSTANCE
+
+#endif //AZURE_IOTHUB_LITE_H
