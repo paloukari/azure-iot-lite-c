@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="Azure_IoT_SDK_Lite">
+  <PropertyGroup Label="Default initializers for properties">
+    <Linkage-Azure_IoT_SDK_Lite Condition="'$(Linkage-Azure_IoT_SDK_Lite)' == ''">static</Linkage-Azure_IoT_SDK_Lite>
+    <CallingConvention-Azure_IoT_SDK_Lite Condition="'$(CallingConvention-Azure_IoT_SDK_Lite)' == ''">cdecl</CallingConvention-Azure_IoT_SDK_Lite>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)../../build/native/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)../../build/native/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="Win32Debug" Condition="(( $(Configuration.ToLower().IndexOf('debug')) &gt; -1 ) And ('$(Platform)' == 'Win32' ) )">
+    <Link>
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)Win32/Debug/azure_iot_lite.lib;%(AdditionalDependencies)</AdditionalDependencies>      
+    </Link>    
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="Win32Release" Condition="(( $(Configuration.ToLower().IndexOf('debug')) == -1 ) And ('$(Platform)' == 'Win32' ) )">
+    <Link>
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)Win32/Release/azure_iot_lite.lib;%(AdditionalDependencies)</AdditionalDependencies>      
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="Win64Debug" Condition="(( $(Configuration.ToLower().IndexOf('debug')) &gt; -1 ) And ('$(Platform)' == 'x64' ) )">
+    <Link>      
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)x64/Debug/azure_iot_lite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="Win64Release" Condition="(( $(Configuration.ToLower().IndexOf('debug')) == -1 ) And ('$(Platform)' == 'x64' ) )">
+    <Link>
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)x64/Release/azure_iot_lite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="ArmDebug" Condition="(( $(Configuration.ToLower().IndexOf('debug')) &gt; -1 ) And ('$(Platform)' == 'arm' ) )">
+    <Link>      
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)arm/Debug/azure_iot_lite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Label="ArmRelease" Condition="(( $(Configuration.ToLower().IndexOf('debug')) == -1 ) And ('$(Platform)' == 'arm' ) )">
+    <Link>
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)arm/Release/azure_iot_lite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <UsingTask TaskName="Azure_IoT_SDK_Lite_Contains" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
+    <ParameterGroup>
+      <Text Output="false" ParameterType="System.String" />
+      <Library Output="false" Required="true" ParameterType="System.String" />
+      <Value Output="false" Required="true" ParameterType="System.String" />
+      <Result Output="true" ParameterType="System.String" />
+    </ParameterGroup>
+    <Task>
+      <Code>Result = ((Text ?? "").Split(';').Contains(Library) ) ? Value : String.Empty;</Code>
+    </Task>
+  </UsingTask>
+  <Target Name="Azure_IoT_SDK_Lite">
+    <Azure_IoT_SDK_Lite_Contains Text="Linkage-dynamic" Library="Azure_IoT_SDK_Lite" Value="dynamic" Condition="'$(Linkage-Azure_IoT_SDK_Lite_Init)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-Azure_IoT_SDK_Lite_Init" />
+    </Azure_IoT_SDK_Lite_Contains>
+    <Azure_IoT_SDK_Lite_Contains Text="Linkage-static" Library="Azure_IoT_SDK_Lite" Value="static" Condition="'$(Linkage-Azure_IoT_SDK_Lite_Init)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-Azure_IoT_SDK_Lite_Init" />
+    </Azure_IoT_SDK_Lite_Contains>
+    <Azure_IoT_SDK_Lite_Contains Text="Linkage-ltcg" Library="Azure_IoT_SDK_Lite" Value="ltcg" Condition="'$(Linkage-Azure_IoT_SDK_Lite_Init)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-Azure_IoT_SDK_Lite_Init" />
+    </Azure_IoT_SDK_Lite_Contains>
+    <Azure_IoT_SDK_Lite_Contains Text="Linkage-sxs" Library="Azure_IoT_SDK_Lite" Value="sxs" Condition="'$(Linkage-Azure_IoT_SDK_Lite_Init)'==''">
+      <Output TaskParameter="Result" PropertyName="Linkage-Azure_IoT_SDK_Lite_Init" />
+    </Azure_IoT_SDK_Lite_Contains>
+    <Azure_IoT_SDK_Lite_Contains Text="CallingConvention-cdecl" Library="Azure_IoT_SDK_Lite" Value="cdecl" Condition="'$(CallingConvention-Azure_IoT_SDK_Lite)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Azure_IoT_SDK_Lite" />
+    </Azure_IoT_SDK_Lite_Contains>
+    <Azure_IoT_SDK_Lite_Contains Text="CallingConvention-stdcall" Library="Azure_IoT_SDK_Lite" Value="stdcall" Condition="'$(CallingConvention-Azure_IoT_SDK_Lite)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Azure_IoT_SDK_Lite" />
+    </Azure_IoT_SDK_Lite_Contains>
+    <Azure_IoT_SDK_Lite_Contains Text="CallingConvention-fastcall" Library="Azure_IoT_SDK_Lite" Value="fastcall" Condition="'$(CallingConvention-Azure_IoT_SDK_Lite)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Azure_IoT_SDK_Lite" />
+    </Azure_IoT_SDK_Lite_Contains>
+    <Azure_IoT_SDK_Lite_Contains Text="CallingConvention-thiscall" Library="Azure_IoT_SDK_Lite" Value="thiscall" Condition="'$(CallingConvention-Azure_IoT_SDK_Lite)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Azure_IoT_SDK_Lite" />
+    </Azure_IoT_SDK_Lite_Contains>
+    <Azure_IoT_SDK_Lite_Contains Text="CallingConvention-clrcall" Library="Azure_IoT_SDK_Lite" Value="clrcall" Condition="'$(CallingConvention-Azure_IoT_SDK_Lite)'==''">
+      <Output TaskParameter="Result" PropertyName="CallingConvention-Azure_IoT_SDK_Lite" />
+    </Azure_IoT_SDK_Lite_Contains>
+  </Target>
+    <Target Name="Azure_IoT_SDK_Lite_redist_AfterBuild" AfterTargets="AfterBuild" />
+  <Target Name="Azure_IoT_SDK_Lite_redist_AfterBuild_Win32_and_Debug" Label="Win32 and Debug" Condition="'$(Platform.ToLower())' == 'win32' And ( $(Configuration.ToLower().IndexOf('debug')) &gt; -1 )" AfterTargets="Azure_IoT_SDK_Lite_redist_AfterBuild">
+  </Target>
+  <Target Name="Azure_IoT_SDK_Lite_redist_AfterBuild_Win32_and_Release" Label="Win32 and Release" Condition="'$(Platform.ToLower())' == 'win32' And ( $(Configuration.ToLower().IndexOf('debug')) == -1 )" AfterTargets="Azure_IoT_SDK_Lite_redist_AfterBuild">
+  </Target>
+
+  <Target Name="Azure_IoT_SDK_Lite_redist_AfterBuild_Win64_and_Debug" Label="Win64 and Debug" Condition="'$(Platform.ToLower())' == 'x64' And ( $(Configuration.ToLower().IndexOf('debug')) &gt; -1 )" AfterTargets="Azure_IoT_SDK_Lite_redist_AfterBuild">
+  </Target>
+  <Target Name="Azure_IoT_SDK_Lite_redist_AfterBuild_Win64_and_Release" Label="Win64 and Release" Condition="'$(Platform.ToLower())' == 'x64' And ( $(Configuration.ToLower().IndexOf('debug')) == -1 )" AfterTargets="Azure_IoT_SDK_Lite_redist_AfterBuild">
+  </Target>
+
+  <Target Name="Azure_IoT_SDK_Lite_redist_AfterBuild_Arm_and_Debug" Label="Arm and Debug" Condition="'$(Platform.ToLower())' == 'arm' And ( $(Configuration.ToLower().IndexOf('debug')) &gt; -1 )" AfterTargets="Azure_IoT_SDK_Lite_redist_AfterBuild">
+  </Target>
+  <Target Name="Azure_IoT_SDK_Lite_redist_AfterBuild_Arm_and_Release" Label="Arm and Release" Condition="'$(Platform.ToLower())' == 'arm' And ( $(Configuration.ToLower().IndexOf('debug')) == -1 )" AfterTargets="Azure_IoT_SDK_Lite_redist_AfterBuild">
+  </Target>
+  
+</Project>

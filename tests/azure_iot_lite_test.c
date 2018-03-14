@@ -20,7 +20,7 @@ int main()
 
 void test_send_message() {
 	//create the device
-	struct device * mxchip = Device.create(CONNECTION_STRING);
+	struct device *mxchip = Device.create(CONNECTION_STRING);
 	//post the telemetry payload
 	mxchip->send_message(mxchip, "Some Telemetry data testing send..");
 
