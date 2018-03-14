@@ -1,39 +1,40 @@
 ﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
-    <metadata>
-        <id>Paloukari.Azure.IoT.Lite.C</id>
-        <version>0.0.1</version>
-        <title>Microsoft Azure IoTHub C SDK thin layer wrapper</title>
-        <authors>paloukari</authors>
-        <licenseUrl>https://github.com/paloukari/azure-iot-lite-c/blob/master/LICENSE</licenseUrl>
-        <projectUrl>https://github.com/paloukari/azure-iot-lite-c</projectUrl>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Microsoft Azure IoTHub C SDK thin layer facade</description>
-        <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288890</iconUrl>
-        <summary>This nuget package can be used to connect to IoTHub</summary>
-        <releaseNotes/>
-        <copyright></copyright>
-        <tags>Microsoft Azure IoT Native x86 x64 arm native package</tags>
-        <dependencies>
-            <dependency id="Microsoft.Azure.Uamqp" version="1.0.52"/>
-            <dependency id="Microsoft.Azure.IoTHub.IoTHubClient" version="1.1.33"/>
-            <dependency id="Microsoft.Azure.IoTHub.AmqpTransport" version="1.2.0"/>
-            <dependency id="Microsoft.Azure.C.SharedUtility" version="1.0.52"/>
-        </dependencies>
-    </metadata>
-    <files>
-        <!-- these are files for x86 plaform -->
-        <file src="azure_iot_lite\Win32\Debug\azure_iot_lite.lib" target="build\native\Win32\Debug"/>
-        <file src="azure_iot_lite\Win32\Debug\azure_iot_lite.pdb" target="build\native\Win32\Debug"/>
-        <!-- <file src="azure_iot_lite\Win32\Release\azure_iot_lite.lib" target="build\native\Win32\Release"/> -->
-      
-        <!-- these are files for x64 plaform -->
-        <!--<file src="..\..\..\cmake\iot_sdk_output\c\x64\debug\iothub_client_amqp_transport.lib" target="build\native\x64\Debug"/>-->
-        
-        <!-- these are files for arm plaform -->
-        <!--<file src="..\..\..\cmake\iot_sdk_output\c\arm\debug\iothub_client_amqp_transport.lib" target="build\native\arm\Debug"/>-->
-        
-        <file src="Paloukari.Azure.IoT.Lite.C.targets" target="build\native"/>
-        <file src="..\..\inc\azure_iot_lite.h" target="build\native\include"/>
-    </files>
+  <metadata>
+    <id>Paloukari.Azure.IoT.Lite.C</id>
+    <version>0.0.1</version>
+    <title>A thin layer facade of the Microsoft Azure IoTHub C SDK</title>
+    <authors>paloukari</authors>
+    <licenseUrl>https://github.com/paloukari/azure-iot-lite-c/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/paloukari/azure-iot-lite-c</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A thin layer facade of the Microsoft Azure IoTHub C SDK</description>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288890</iconUrl>
+    <summary>This is a thin layer facade of the Microsoft Azure IoTHub C SDK that greatly simplifies the SDK and accelarates the IoT development in C</summary>
+    <language>C</language>
+    <releaseNotes/>
+    <copyright></copyright>
+    <tags>Microsoft Azure IoT Native x86 x64 arm native package</tags>
+    <dependencies>
+      <dependency id="Microsoft.Azure.Uamqp" version="1.0.52"/>
+      <dependency id="Microsoft.Azure.IoTHub.IoTHubClient" version="1.1.33"/>
+      <dependency id="Microsoft.Azure.IoTHub.AmqpTransport" version="1.2.0"/>
+      <dependency id="Microsoft.Azure.C.SharedUtility" version="1.0.52"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- these are files for x86 plaform -->
+    <file src="azure_iot_lite\Win32\Debug\azure_iot_lite.lib" target="build\native\Win32\Debug"/>
+    <file src="azure_iot_lite\Win32\Debug\azure_iot_lite.pdb" target="build\native\Win32\Debug"/>
+    <!-- <file src="azure_iot_lite\Win32\Release\azure_iot_lite.lib" target="build\native\Win32\Release"/> -->
+
+    <!-- these are files for x64 plaform -->
+    <!--<file src="..\..\..\cmake\iot_sdk_output\c\x64\debug\iothub_client_amqp_transport.lib" target="build\native\x64\Debug"/>-->
+
+    <!-- these are files for arm plaform -->
+    <!--<file src="..\..\..\cmake\iot_sdk_output\c\arm\debug\iothub_client_amqp_transport.lib" target="build\native\arm\Debug"/>-->
+
+    <file src="Paloukari.Azure.IoT.Lite.C.targets" target="build\native"/>
+    <file src="..\..\inc\azure_iot_lite.h" target="build\native\include"/>
+  </files>
 </package>

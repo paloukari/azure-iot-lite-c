@@ -11,7 +11,7 @@ void test_post_message();
 void test_send_message();
 
 int main()
-{
+{	
 	test_send_message();
 	test_post_message();
 	test_multiple_post_messages();
@@ -40,7 +40,7 @@ void test_post_message() {
 		return;
 	}
 
-	while (mxchip->wait_for_ack(mxchip, message_id)) {
+	while (mxchip->wait_for_message_ack(mxchip, message_id)) {
 
 		//flush the upstream/downstream network buffers
 		mxchip->flush(mxchip);
@@ -72,4 +72,3 @@ void test_multiple_post_messages() {
 
 	Device.destroy(mxchip);
 }
-

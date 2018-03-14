@@ -115,17 +115,33 @@ const char certificates[] =
 #pragma endregion
 
 #pragma region helpers
-void LogError(char * log)
+
+
+
+int get_send_timeout(struct device* device)
+{
+	const char* timeout;
+	bool res;
+	if (device && device->system_properties)
+		if (Map_ContainsKey(device->system_properties, SEND_TIMEOUT, &res) == MAP_OK && res)
+		{
+			timeout = Map_GetValueFromKey(device->system_properties, SEND_TIMEOUT);
+			if (timeout)
+				return atoi(timeout);
+		}
+	return DEFAULT_SEND_TIMEOUT;
+}
+void log_error(char * log)
 {
 	printf(log);
 }
 
-char* New_Uid()
+char* new_uid()
 {
 	char* unique_container_id = NULL;
 	if ((unique_container_id = (char*)malloc(sizeof(char) * DEFAULT_UNIQUE_ID_LENGTH + 1)) == NULL)
 	{
-		LogError("Failed allocating Uid");
+		log_error("Failed allocating Uid");
 		return 0;
 	}
 	else
@@ -133,7 +149,7 @@ char* New_Uid()
 		memset(unique_container_id, 0, sizeof(char) * DEFAULT_UNIQUE_ID_LENGTH + 1);
 		if (UniqueId_Generate(unique_container_id, DEFAULT_UNIQUE_ID_LENGTH) != 0)
 		{
-			LogError("Failed creating Uid");
+			log_error("Failed creating Uid");
 			return 0;
 		}
 	}
@@ -141,7 +157,7 @@ char* New_Uid()
 	return unique_container_id;
 }
 
-const IOTHUB_CLIENT_TRANSPORT_PROVIDER Default_Protocol(void)
+const IOTHUB_CLIENT_TRANSPORT_PROVIDER default_Protocol(void)
 {
 	//hardcoded to amqp for now
 	return AMQP_Protocol;
@@ -154,20 +170,20 @@ const tDevice Device = {
 	.destroy = device_type_destroy,
 };
 
-struct device *device_type_create(char *connectionString) {
+struct device *device_type_create(const char *connectionString) {
 
 	if (platform_init() != 0)
 	{
-		LogError("Failed to initialize the platform.\n");
+		log_error("Failed to initialize the platform.\n");
 		//todo: handle this error
 		return 0;
 	}
 
 	/*create an IoTHub client*/
-	IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle = IoTHubClient_LL_CreateFromConnectionString(connectionString, Default_Protocol());
+	IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle = IoTHubClient_LL_CreateFromConnectionString(connectionString, default_Protocol());
 	if (iotHubClientHandle == NULL)
 	{
-		LogError("Failure creating IoTHubClient handle");
+		log_error("Failure creating IoTHubClient handle");
 		//todo: handle this error
 		return 0;
 	}
@@ -199,7 +215,7 @@ struct device *device_type_create(char *connectionString) {
 	result->set_system_property = device_set_system_property;
 	result->message_pending_acks = message_pending_acks;
 
-	result->wait_for_ack = device_wait_for_ack;
+	result->wait_for_message_ack = device_wait_for_message_ack;
 	result->wait_for_all_acks = device_wait_for_all_acks;
 
 
@@ -234,7 +250,7 @@ void message_ack(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userContextCall
 	free(ack);
 }
 
-IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, char **message_id) {
+IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, const char *message, char **message_id) {
 
 	bool res = true;
 
@@ -243,14 +259,14 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, ch
 	if (Map_ContainsKey(self->system_properties, CONTENT_TYPE, &res) != MAP_OK || !res
 		|| IoTHubMessage_SetContentTypeSystemProperty(message_handle, Map_GetValueFromKey(self->system_properties, CONTENT_TYPE)) != IOTHUB_MESSAGE_OK)
 	{
-		LogError("failed reading ContentType.");
+		log_error("failed reading ContentType.");
 		return IOTHUB_MESSAGE_ERROR;
 	}
 
 	if (Map_ContainsKey(self->system_properties, CONTENT_ENCODING, &res) != MAP_OK || !res
 		|| IoTHubMessage_SetContentEncodingSystemProperty(message_handle, Map_GetValueFromKey(self->system_properties, CONTENT_ENCODING)) != IOTHUB_MESSAGE_OK)
 	{
-		LogError("failed reading ContentEncoding.");
+		log_error("failed reading ContentEncoding.");
 		return IOTHUB_MESSAGE_ERROR;
 	}
 
@@ -258,10 +274,10 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, ch
 	bool has_key = false;
 	if (Map_ContainsKey(self->message_properties, MESSAGE_ID, &has_key) == MAP_OK && !has_key)
 	{
-		char *msg_id = New_Uid();
+		char *msg_id = new_uid();
 		if (IoTHubMessage_SetMessageId(message_handle, msg_id) != IOTHUB_MESSAGE_OK)
 		{
-			LogError("failed setting the MESSAGE_ID.");
+			log_error("failed setting the MESSAGE_ID.");
 			return IOTHUB_MESSAGE_ERROR;
 		}
 		free(msg_id);
@@ -269,10 +285,10 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, ch
 
 	if (Map_ContainsKey(self->message_properties, CORRELATION_ID, &has_key) == MAP_OK && !has_key)
 	{
-		char *correlation_id = New_Uid();
+		char *correlation_id = new_uid();
 		if (IoTHubMessage_SetCorrelationId(message_handle, correlation_id) != IOTHUB_MESSAGE_OK)
 		{
-			LogError("failed setting the CORRELATION_ID.");
+			log_error("failed setting the CORRELATION_ID.");
 			return IOTHUB_MESSAGE_ERROR;
 		}
 		free(correlation_id);
@@ -284,7 +300,7 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, ch
 
 	if (Map_GetInternals(self->message_properties, &propertyKeys, &propertyValues, &propertyCount) != MAP_OK)
 	{
-		LogError("failed getting message properties details.");
+		log_error("failed getting message properties details.");
 		return IOTHUB_MESSAGE_ERROR;
 	}
 
@@ -296,7 +312,7 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, ch
 		{
 			if (IoTHubMessage_SetMessageId(message_handle, propertyValues[i]) != IOTHUB_MESSAGE_OK)
 			{
-				LogError("failed setting the MESSAGE_ID.");
+				log_error("failed setting the MESSAGE_ID.");
 				return IOTHUB_MESSAGE_ERROR;
 			}
 		}
@@ -304,14 +320,14 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, ch
 		{
 			if (IoTHubMessage_SetCorrelationId(message_handle, propertyValues[i]) != IOTHUB_MESSAGE_OK)
 			{
-				LogError("failed setting the CORRELATION_ID.");
+				log_error("failed setting the CORRELATION_ID.");
 				return IOTHUB_MESSAGE_ERROR;
 			}
 		}
 		else
 			if (Map_AddOrUpdate(propMap, propertyKeys[i], propertyValues[i]) != MAP_OK)
 			{
-				LogError("failed getting message properties details.");
+				log_error("failed getting message properties details.");
 				return IOTHUB_MESSAGE_ERROR;
 			}
 	}
@@ -325,7 +341,7 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, ch
 	sprintf(strTime, "%d", (int)rawtime);
 
 	Map_AddOrUpdate(self->message_pending_acks, message_Id, strTime);
-	
+
 	struct ack* ack = (struct ack*) malloc(sizeof(struct ack));
 	ack->device = self;
 	mallocAndStrcpy_s(&(ack->message_Id), (char *)message_Id);
@@ -340,17 +356,17 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, char *message, ch
 	return IOTHUB_MESSAGE_OK;
 }
 
-IOTHUB_MESSAGE_RESULT device_send_message(struct device *self, char *message)
+IOTHUB_MESSAGE_RESULT device_send_message(struct device *self, const char *message)
 {
 	char* message_id;
 	IOTHUB_MESSAGE_RESULT result = self->post_message(self, message, &message_id);
 	if (result != IOTHUB_MESSAGE_OK)
 	{
-		LogError("Failed to post message");
+		log_error("Failed to post message");
 		return result;
 	}
 
-	while (self->wait_for_ack(self, message_id)) {
+	while (self->wait_for_message_ack(self, message_id)) {
 
 		//flush the upstream/downstream network buffers
 		self->flush(self);
@@ -361,7 +377,7 @@ IOTHUB_MESSAGE_RESULT device_send_message(struct device *self, char *message)
 	return result;
 }
 
-void device_on_ack(struct device* self, bool success, char* message_id)
+void device_on_ack(struct device* self, bool success, const char* message_id)
 {
 	if (success && self->on_message_sent)
 		self->on_message_sent(message_id);
@@ -372,7 +388,7 @@ void device_on_ack(struct device* self, bool success, char* message_id)
 	bool key_exists = false;
 	if (message_id && Map_ContainsKey(self->message_pending_acks, message_id, &key_exists) != MAP_OK || key_exists)
 		if (Map_Delete(self->message_pending_acks, message_id) != MAP_OK)
-			LogError("Could not remove a message from the pending ack list");
+			log_error("Could not remove a message from the pending ack list");
 
 }
 
@@ -384,24 +400,23 @@ bool device_wait_for_all_acks(struct device* self)
 
 	if (Map_GetInternals(self->message_pending_acks, &propertyKeys, &propertyValues, &propertyCount) != MAP_OK)
 	{
-		LogError("failed getting message properties details.");
+		log_error("failed getting message properties details.");
 		return IOTHUB_MESSAGE_ERROR;
 	}
 
 	time_t now;
 	time(&now);
-	
+
 	for (size_t i = 0; i < propertyCount; i++)
 	{
 		time_t message_sent = (time_t)atoi(propertyValues[i]);
-		if (now - message_sent < ACK_TIMEOUT)
+		if (now - message_sent < get_send_timeout(self))
 			return true;
 	}
 	return false;
 }
 
-
-bool device_wait_for_ack(struct device* self, char* message_id)
+bool device_wait_for_message_ack(struct device* self, const char* message_id)
 {
 	bool key_exists = false;
 
@@ -412,27 +427,26 @@ bool device_wait_for_ack(struct device* self, char* message_id)
 
 		const char* value = Map_GetValueFromKey(self->message_pending_acks, message_id);
 		time_t message_sent = (time_t)atoi(value);
-		if (now - message_sent < ACK_TIMEOUT)
+		if (now - message_sent < get_send_timeout(self))
 			return true;
-		
+
 	}
 	return false;
 }
 
-
-IOTHUB_MESSAGE_RESULT device_set_message_property(struct device* self, char *key, char *value) {
+IOTHUB_MESSAGE_RESULT device_set_message_property(struct device* self, const char *key, const char *value) {
 	if (Map_AddOrUpdate(self->message_properties, key, value) != MAP_OK)
 	{
-		LogError("failed setting message property.");
+		log_error("failed setting message property.");
 		return IOTHUB_MESSAGE_ERROR;
 	}
 	return IOTHUB_MESSAGE_OK;
 }
 
-IOTHUB_MESSAGE_RESULT device_set_system_property(struct device* self, char *key, char *value) {
+IOTHUB_MESSAGE_RESULT device_set_system_property(struct device* self, const char *key, const char *value) {
 	if (Map_AddOrUpdate(self->system_properties, key, value) != MAP_OK)
 	{
-		LogError("failed setting system property.");
+		log_error("failed setting system property.");
 		return IOTHUB_MESSAGE_ERROR;
 	}
 	return IOTHUB_MESSAGE_OK;
@@ -442,5 +456,3 @@ void device_flush(struct device* self) {
 
 	IoTHubClient_LL_DoWork(self->iothub_ll_handle);
 }
-
-

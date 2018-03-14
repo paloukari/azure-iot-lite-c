@@ -3,8 +3,38 @@ The Azure IoT Lite C is a thin library on top of the official Microsoft Azure C 
 
 ## Quickstart
 
-TODO: add the setup readme here
+1. In Visual Studio, create an empty C++ Project
+1. Install the **azure-iot-lite-c** library Nuget Package:
 
+	`Install-Package Paloukari.Azure.IoT.Lite.C`
+1. Add a new `main.c` file 
+1. Include the single required header
+
+	`#include "azure_iot_lite.h"`
+1. Define an empty main
+	```
+	int main()
+	{
+
+	}
+	```
+1. Pick one of the examples bellow to test out. 
+*The complete code for sending a telemetry message looks like this:*
+		
+	```
+	#include "azure_iot_lite.h"
+
+	int main()
+	{
+		//create the device
+		struct device *mxchip = Device.create("your device connection string");
+		//post the telemetry payload
+		mxchip->send_message(mxchip, "Some Telemetry data testing send..");
+		//destroy the device
+		Device.destroy(mxchip);
+	}
+	```
+	
 **Samples:**
 
 1. Sending a D2C message:
