@@ -58,6 +58,8 @@ The Azure IoT Lite C is a thin library on top of the official Microsoft Azure C 
 1. Posting a D2C message (non blocking call):
 
    In this example, `post_message` will enqueue a new message in the outbound queue without blocking the thread. When you call `flush`, all messages in the outbound queue will be sent and all incoming network traffic will be processed and put in the inbound queue.
+   
+   This pattern is more complicated than the `send_message` example, but is more useful for single threaded applications that need to have an 'async' behavior.
 
     ```
     //create the device
