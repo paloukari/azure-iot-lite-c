@@ -11,15 +11,19 @@ The Azure IoT Lite C is a thin library on top of the official Microsoft Azure C 
 1. Include the single required header
 
 	`#include "azure_iot_lite.h"`
+
+1. Add the bellow libraries in the Input of the Library properties of your project
+
+    `rpcrt4.lib;crypt32.lib;advapi32.lib`
 1. Define an empty main
-	```
+    ```
 	int main()
 	{
 
 	}
 	```
 1. Pick one of the examples bellow to test out. 
-*The complete code for sending a telemetry message looks like this:*
+	#### The complete code for sending a telemetry message looks like this:
 		
 	```
 	#include "azure_iot_lite.h"
@@ -39,6 +43,8 @@ The Azure IoT Lite C is a thin library on top of the official Microsoft Azure C 
 
 1. Sending a D2C message:
 
+   In this example, `send_message` will block execution until the message has been sent and the server acknowledgement has been received.
+
     ```
     //create the device
 	struct device *mxchip = Device.create(CONNECTION_STRING);
@@ -47,7 +53,12 @@ The Azure IoT Lite C is a thin library on top of the official Microsoft Azure C 
     //destroy the device
 	Device.destroy(mxchip);
     ```
+
+   
 1. Posting a D2C message (non blocking call):
+
+   In this example, `post_message` will enqueue a new message in the outbound queue without blocking the thread. When you call `flush`, all messages in the outbound queue will be sent and all incoming network traffic will be processed and put in the inbound queue.
+
     ```
     //create the device
 	struct device * mxchip = Device.create(CONNECTION_STRING);
