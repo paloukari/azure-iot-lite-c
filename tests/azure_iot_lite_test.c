@@ -1,27 +1,29 @@
-// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "connection_string.h"
+
 #include "azure_iot_lite.h"
-#define CONNECTION_STRING "<<DEVICE CONNECTION STRING>>"
 
 void test_multiple_post_messages();
 void test_post_message();
 void test_send_message();
+void test_receive_message();
 
 int main()
 {	
 	test_send_message();
 	test_post_message();
 	test_multiple_post_messages();
+
+	test_receive_message();
 }
 
 
 void test_send_message() {
 	//create the device
 	struct device *mxchip = Device.create(CONNECTION_STRING);
-	//post the telemetry payload
+	//send the telemetry payload
 	mxchip->send_message(mxchip, "Some Telemetry data testing send..");
 
 	Device.destroy(mxchip);
@@ -69,6 +71,16 @@ void test_multiple_post_messages() {
 		//wait for the server to ack
 		ThreadAPI_Sleep(1);
 	}
+
+	Device.destroy(mxchip);
+}
+
+void test_receive_message() {
+	//create the device
+	struct device * mxchip = Device.create(CONNECTION_STRING);
+	//post the telemetry payload
+	struct message* msg;
+	mxchip->receive_message(mxchip, &msg);	
 
 	Device.destroy(mxchip);
 }

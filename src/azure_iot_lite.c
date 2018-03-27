@@ -116,7 +116,8 @@ const char certificates[] =
 
 #pragma region helpers
 
-
+int g_platform_init = false;
+static LOCK_HANDLE g_platform_init_lock = NULL;
 
 int get_send_timeout(struct device* device)
 {
@@ -164,6 +165,67 @@ const IOTHUB_CLIENT_TRANSPORT_PROVIDER default_Protocol(void)
 }
 #pragma endregion
 
+#pragma region message_type
+const tMessage Message = {
+	.create = message_type_create,
+	.destroy = message_type_destroy,
+	.cpy = message_type_copy,
+};
+
+void* message_type_copy(struct message *src, struct message **dst) {
+
+	*dst = Message.create(src->message_Id, src->correlation_Id);
+	(*dst)->content_type = src->content_type;
+
+	if (src->content_type == IOTHUBMESSAGE_BYTEARRAY)
+	{
+		(*dst)->data_len = src->data_len;
+		(*dst)->data.binary = malloc(src->data_len * sizeof(unsigned char));
+		memcpy((*dst)->data.binary, src->data.binary, src->data_len);
+	}
+	else
+	{
+		mallocAndStrcpy_s(&((*dst)->data.text), (char *)src->data.text);
+	}
+	return 0;
+}
+struct message *message_type_create(const char* messageId, const char* correlationId) {
+
+	struct message *msg = (struct message*) malloc(sizeof(struct message));
+	memset(msg, 0, sizeof(*msg));
+
+	if (messageId)
+		mallocAndStrcpy_s(&(msg->message_Id), (char *)messageId);
+
+	if (correlationId)
+		mallocAndStrcpy_s(&(msg->correlation_Id), (char *)correlationId);
+
+	return msg;
+}
+
+void *message_type_destroy(struct message *msg) {
+
+	if (msg)
+	{
+		if (msg->correlation_Id)
+		{
+			free(msg->correlation_Id);
+			msg->correlation_Id = NULL;
+		}
+		if (msg->message_Id) {
+			free(msg->message_Id);
+			msg->message_Id = NULL;
+		}
+		if (msg->data.text)
+		{
+			free(msg->data.text);
+			msg->data.text = NULL;
+		}
+	}
+	return 0;
+}
+#pragma endregion
+
 #pragma region device_type
 const tDevice Device = {
 	.create = device_type_create,
@@ -172,11 +234,23 @@ const tDevice Device = {
 
 struct device *device_type_create(const char *connectionString) {
 
-	if (platform_init() != 0)
+	//todo: make this static 
+	if (g_platform_init_lock == NULL)
+		g_platform_init_lock = Lock_Init();
+	if (!g_platform_init)
 	{
-		log_error("Failed to initialize the platform.\n");
-		//todo: handle this error
-		return 0;
+		Lock(g_platform_init_lock);
+		if (!g_platform_init)
+		{
+			if (platform_init() != 0)
+			{
+				log_error("Failed to initialize the platform.\n");
+				//todo: handle this error
+				return 0;
+			}
+			g_platform_init++;
+		}
+		Unlock(g_platform_init_lock);
 	}
 
 	/*create an IoTHub client*/
@@ -200,6 +274,7 @@ struct device *device_type_create(const char *connectionString) {
 
 	//set the default message values 
 	MAP_HANDLE message_properties = Map_Create(NULL);
+	LOCK_HANDLE receive_lock_handle = Lock_Init();
 
 	struct device *result = (struct device*)malloc(sizeof(struct device));
 	memset(result, 0, sizeof(*result));
@@ -211,6 +286,9 @@ struct device *device_type_create(const char *connectionString) {
 	result->post_message = device_post_message;
 	result->send_message = device_send_message;
 
+	result->receive_message = device_receive_message;
+	result->set_receive_handler = device_set_receive_handler;
+
 	result->set_message_property = device_set_message_property;
 	result->set_system_property = device_set_system_property;
 	result->message_pending_acks = message_pending_acks;
@@ -218,6 +296,14 @@ struct device *device_type_create(const char *connectionString) {
 	result->wait_for_message_ack = device_wait_for_message_ack;
 	result->wait_for_all_acks = device_wait_for_all_acks;
 
+	result->receive_handler = device_receive_handler;
+
+	result->receive_lock_handle = receive_lock_handle;
+
+	if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, result->receive_handler, &result) != IOTHUB_CLIENT_OK)
+	{
+		(void)printf("ERROR: IoTHubClient_LL_SetMessageCallback..........FAILED!\r\n");
+	}
 
 	result->on_ack = device_on_ack;
 
@@ -235,6 +321,8 @@ void *device_type_destroy(struct device * device) {
 	Map_Destroy(device->system_properties);
 	Map_Destroy(device->message_pending_acks);
 
+	Lock_Deinit(device->receive_lock_handle);
+
 	free(device);
 	return 0;
 }
@@ -248,6 +336,74 @@ void message_ack(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userContextCall
 
 	free(ack->message_Id);
 	free(ack);
+}
+
+
+IOTHUBMESSAGE_DISPOSITION_RESULT device_receive_handler(IOTHUB_MESSAGE_HANDLE message, void* user_context) {
+
+	if (user_context == NULL)
+	{
+		log_error("failed reading ContentType.");
+		return IOTHUBMESSAGE_ABANDONED;
+	}
+	struct device* device = user_context;
+
+	const char* messageId;
+	const char* correlationId;
+
+	// Message properties
+	messageId = IoTHubMessage_GetMessageId(message);
+	correlationId = IoTHubMessage_GetCorrelationId(message);
+
+	struct message* msg = Message.create(messageId, correlationId);
+
+	msg->content_type = IoTHubMessage_GetContentType(message);
+	if (msg->content_type == IOTHUBMESSAGE_BYTEARRAY)
+	{
+		const unsigned char* buff_msg;
+		size_t data_len;
+
+		if (IoTHubMessage_GetByteArray(message, &buff_msg, &data_len) != IOTHUB_MESSAGE_OK)
+		{
+			(void)printf("Failure retrieving byte array message\r\n");
+			Message.destroy(msg);
+			return IOTHUBMESSAGE_ABANDONED;
+		}
+		else
+		{
+			malloc(data_len * sizeof(unsigned char));
+			memcpy(msg->data.binary, buff_msg, data_len);
+			msg->data_len = data_len;
+		}
+	}
+	else
+	{
+		//if not byte array, it's string
+		const char* string_msg = IoTHubMessage_GetString(message);
+		if (string_msg == NULL)
+		{
+			(void)printf("Failure retrieving byte array message\r\n");
+			Message.destroy(msg);
+			return IOTHUBMESSAGE_ABANDONED;
+		}
+		else
+		{
+			mallocAndStrcpy_s(&(msg->data.text), (char *)string_msg);
+		}
+	}
+
+	Lock(device->receive_lock_handle);
+	if (device->last_inbound_message)
+		Message.destroy(device->last_inbound_message);
+	
+	device->last_inbound_message = msg;
+
+	if (device->receive_user_handle)
+		device->receive_user_handle(device->last_inbound_message, device->user_context);
+
+	Unlock(device->receive_lock_handle);
+
+	return IOTHUBMESSAGE_ACCEPTED;
 }
 
 IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, const char *message, char **message_id) {
@@ -377,6 +533,38 @@ IOTHUB_MESSAGE_RESULT device_send_message(struct device *self, const char *messa
 	return result;
 }
 
+IOTHUB_MESSAGE_RESULT device_receive_message(struct device *self, struct message** msg)
+{
+
+	Lock(self->receive_lock_handle);
+	if (self->last_inbound_message)
+	{
+		Message.destroy(self->last_inbound_message);
+		self->last_inbound_message = NULL;
+	}
+	Unlock(self->receive_lock_handle);
+
+	while (Lock(self->receive_lock_handle) == LOCK_OK) {
+
+		if (self->last_inbound_message == NULL)
+			Unlock(self->receive_lock_handle);
+		else
+		{
+			Message.cpy(self->last_inbound_message, msg);
+			Unlock(self->receive_lock_handle);
+			return IOTHUB_MESSAGE_OK;
+		}
+
+		//flush the upstream/downstream network buffers
+		self->flush(self);
+
+		//wait for the server to ack
+		ThreadAPI_Sleep(1);
+	}
+
+	return IOTHUB_MESSAGE_ERROR;
+}
+
 void device_on_ack(struct device* self, bool success, const char* message_id)
 {
 	if (success && self->on_message_sent)
@@ -449,6 +637,17 @@ IOTHUB_MESSAGE_RESULT device_set_system_property(struct device* self, const char
 		log_error("failed setting system property.");
 		return IOTHUB_MESSAGE_ERROR;
 	}
+	return IOTHUB_MESSAGE_OK;
+}
+
+IOTHUB_MESSAGE_RESULT device_set_receive_handler(struct device* self, receive_message_handler callback, void* user_context)
+{
+	Lock(self->receive_lock_handle);
+	
+	self->receive_user_handle = callback;
+	self->user_context = user_context;
+
+	Unlock(self->receive_lock_handle);
 	return IOTHUB_MESSAGE_OK;
 }
 
