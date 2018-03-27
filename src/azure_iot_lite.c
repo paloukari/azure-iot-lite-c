@@ -300,7 +300,8 @@ struct device *device_type_create(const char *connectionString) {
 
 	result->receive_lock_handle = receive_lock_handle;
 
-	if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, result->receive_handler, &result) != IOTHUB_CLIENT_OK)
+
+	if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, result->receive_handler, result) != IOTHUB_CLIENT_OK)
 	{
 		(void)printf("ERROR: IoTHubClient_LL_SetMessageCallback..........FAILED!\r\n");
 	}
@@ -371,7 +372,7 @@ IOTHUBMESSAGE_DISPOSITION_RESULT device_receive_handler(IOTHUB_MESSAGE_HANDLE me
 		}
 		else
 		{
-			malloc(data_len * sizeof(unsigned char));
+			msg->data.binary = malloc(data_len * sizeof(unsigned char));
 			memcpy(msg->data.binary, buff_msg, data_len);
 			msg->data_len = data_len;
 		}
@@ -395,7 +396,7 @@ IOTHUBMESSAGE_DISPOSITION_RESULT device_receive_handler(IOTHUB_MESSAGE_HANDLE me
 	Lock(device->receive_lock_handle);
 	if (device->last_inbound_message)
 		Message.destroy(device->last_inbound_message);
-	
+
 	device->last_inbound_message = msg;
 
 	if (device->receive_user_handle)
@@ -535,15 +536,6 @@ IOTHUB_MESSAGE_RESULT device_send_message(struct device *self, const char *messa
 
 IOTHUB_MESSAGE_RESULT device_receive_message(struct device *self, struct message** msg)
 {
-
-	Lock(self->receive_lock_handle);
-	if (self->last_inbound_message)
-	{
-		Message.destroy(self->last_inbound_message);
-		self->last_inbound_message = NULL;
-	}
-	Unlock(self->receive_lock_handle);
-
 	while (Lock(self->receive_lock_handle) == LOCK_OK) {
 
 		if (self->last_inbound_message == NULL)
@@ -551,6 +543,10 @@ IOTHUB_MESSAGE_RESULT device_receive_message(struct device *self, struct message
 		else
 		{
 			Message.cpy(self->last_inbound_message, msg);
+
+			Message.destroy(self->last_inbound_message);
+			self->last_inbound_message = NULL;
+
 			Unlock(self->receive_lock_handle);
 			return IOTHUB_MESSAGE_OK;
 		}
@@ -643,7 +639,7 @@ IOTHUB_MESSAGE_RESULT device_set_system_property(struct device* self, const char
 IOTHUB_MESSAGE_RESULT device_set_receive_handler(struct device* self, receive_message_handler callback, void* user_context)
 {
 	Lock(self->receive_lock_handle);
-	
+
 	self->receive_user_handle = callback;
 	self->user_context = user_context;
 

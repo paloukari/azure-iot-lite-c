@@ -83,9 +83,6 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
-# Chutzpah Test files
-_Chutzpah*
-
 # Visual C++ cache files
 ipch/
 *.aps
@@ -318,3 +315,6 @@ ASALocalRun/
 
 # MSBuild Binary and Structured Log
 *.binlog
+
+# The connection string header
+connection_string.h
