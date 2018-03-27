@@ -9,6 +9,7 @@ void test_multiple_post_messages();
 void test_post_message();
 void test_send_message();
 void test_receive_message();
+void test_receive_message_handler();
 
 int main()
 {	
@@ -17,6 +18,7 @@ int main()
 	test_multiple_post_messages();
 
 	test_receive_message();
+	test_receive_message_handler();
 }
 
 
@@ -76,11 +78,31 @@ void test_multiple_post_messages() {
 }
 
 void test_receive_message() {
+	
 	//create the device
 	struct device * mxchip = Device.create(CONNECTION_STRING);
-	//post the telemetry payload
+	
 	struct message* msg;
-	mxchip->receive_message(mxchip, &msg);	
+
+	//receive an inbound message
+	mxchip->receive_message(mxchip, &msg);
+
+	Device.destroy(mxchip);
+}
+
+void *_receive_message_handler(struct message* message, void* user_context) {
+	(void)message;
+	(void)user_context;
+	return 0;
+}
+void test_receive_message_handler() {
+	//create the device
+	struct device * mxchip = Device.create(CONNECTION_STRING);
+	
+	mxchip->set_receive_handler(mxchip, _receive_message_handler, "context");
+
+	//receive an inbound message
+	mxchip->receive_message(mxchip, NULL);
 
 	Device.destroy(mxchip);
 }

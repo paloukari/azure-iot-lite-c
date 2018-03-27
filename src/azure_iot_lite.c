@@ -542,7 +542,8 @@ IOTHUB_MESSAGE_RESULT device_receive_message(struct device *self, struct message
 			Unlock(self->receive_lock_handle);
 		else
 		{
-			Message.cpy(self->last_inbound_message, msg);
+			if(msg)
+				Message.cpy(self->last_inbound_message, msg);
 
 			Message.destroy(self->last_inbound_message);
 			self->last_inbound_message = NULL;
