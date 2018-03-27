@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# The connection string header
+tests/connection_string.h
+
 # User-specific files
 *.suo
 *.user
@@ -316,5 +319,3 @@ ASALocalRun/
 # MSBuild Binary and Structured Log
 *.binlog
 
-# The connection string header
-connection_string.h

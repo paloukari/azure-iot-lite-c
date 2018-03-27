@@ -82,15 +82,17 @@ void test_receive_message() {
 	//create the device
 	struct device * mxchip = Device.create(CONNECTION_STRING);
 	
+	//the pointer of the new incoming message
 	struct message* msg;
 
 	//receive an inbound message
 	mxchip->receive_message(mxchip, &msg);
 
+	//destroy the device
 	Device.destroy(mxchip);
 }
 
-void *_receive_message_handler(struct message* message, void* user_context) {
+void *message_handler(struct message* message, void* user_context) {
 	(void)message;
 	(void)user_context;
 	return 0;
@@ -99,10 +101,11 @@ void test_receive_message_handler() {
 	//create the device
 	struct device * mxchip = Device.create(CONNECTION_STRING);
 	
-	mxchip->set_receive_handler(mxchip, _receive_message_handler, "context");
+	mxchip->set_receive_handler(mxchip, message_handler, "context");
 
 	//receive an inbound message
 	mxchip->receive_message(mxchip, NULL);
 
+	//destroy the device
 	Device.destroy(mxchip);
 }
