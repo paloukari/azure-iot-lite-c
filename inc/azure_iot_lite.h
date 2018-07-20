@@ -1,18 +1,22 @@
 #ifndef AZURE_IOTHUB_LITE_H
 #define AZURE_IOTHUB_LITE_H
 
-#include "iothub_client.h"
-#include "iothub_message.h"
-#include "azure_c_shared_utility/threadapi.h"
-#include "azure_c_shared_utility/crt_abstractions.h"
-#include "azure_c_shared_utility/platform.h"
-#include "azure_c_shared_utility/shared_util_options.h"
-#include "azure_c_shared_utility/uniqueid.h"
-#include "azure_c_shared_utility/crt_abstractions.h"
-#include "azure_c_shared_utility/lock.h"
+#include "iothub.h"
+#include "iothub_device_client_ll.h"
 #include "iothub_client_options.h"
+#include "iothub_message.h"
 
 #include "iothubtransportamqp.h"
+//#include "iothubtransportmqtt.h"
+
+#include "azure_c_shared_utility/crt_abstractions.h"
+#include "azure_c_shared_utility/platform.h"
+#include "azure_c_shared_utility/uniqueid.h"
+#include "azure_c_shared_utility/lock.h"
+
+#include "azure_c_shared_utility/threadapi.h"
+#include "azure_c_shared_utility/crt_abstractions.h"
+#include "azure_c_shared_utility/shared_util_options.h"
 
 #define SEMICOLON ;
 #define CONTENT_TYPE "ContentType"
@@ -88,7 +92,7 @@ extern "C"
 	extern const tMessage Message;
 
 	struct device {
-		IOTHUB_CLIENT_LL_HANDLE iothub_ll_handle;
+		IOTHUB_DEVICE_CLIENT_LL_HANDLE device_ll_handle;
 
 		MAP_HANDLE system_properties;
 		MAP_HANDLE message_properties;

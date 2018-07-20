@@ -162,6 +162,7 @@ const IOTHUB_CLIENT_TRANSPORT_PROVIDER default_Protocol(void)
 {
 	//hardcoded to amqp for now
 	return AMQP_Protocol;
+	//return MQTT_Protocol;
 }
 #pragma endregion
 
@@ -254,7 +255,7 @@ struct device *device_type_create(const char *connectionString) {
 	}
 
 	/*create an IoTHub client*/
-	IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle = IoTHubClient_LL_CreateFromConnectionString(connectionString, default_Protocol());
+	IOTHUB_DEVICE_CLIENT_LL_HANDLE iotHubClientHandle = IoTHubDeviceClient_LL_CreateFromConnectionString(connectionString, default_Protocol());
 	if (iotHubClientHandle == NULL)
 	{
 		log_error("Failure creating IoTHubClient handle");
@@ -262,7 +263,7 @@ struct device *device_type_create(const char *connectionString) {
 		return 0;
 	}
 
-	IoTHubClient_LL_SetOption(iotHubClientHandle, OPTION_TRUSTED_CERT, certificates);
+	IoTHubDeviceClient_LL_SetOption(iotHubClientHandle, OPTION_TRUSTED_CERT, certificates);
 
 	//set the default system values 
 	MAP_HANDLE message_pending_acks = Map_Create(NULL);
@@ -279,7 +280,7 @@ struct device *device_type_create(const char *connectionString) {
 	struct device *result = (struct device*)malloc(sizeof(struct device));
 	memset(result, 0, sizeof(*result));
 
-	result->iothub_ll_handle = iotHubClientHandle;
+	result->device_ll_handle = iotHubClientHandle;
 	result->system_properties = system_properties;
 	result->message_properties = message_properties;
 
@@ -301,9 +302,9 @@ struct device *device_type_create(const char *connectionString) {
 	result->receive_lock_handle = receive_lock_handle;
 
 
-	if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, result->receive_handler, result) != IOTHUB_CLIENT_OK)
+	if (IoTHubDeviceClient_LL_SetMessageCallback(iotHubClientHandle, result->receive_handler, result) != IOTHUB_CLIENT_OK)
 	{
-		(void)printf("ERROR: IoTHubClient_LL_SetMessageCallback..........FAILED!\r\n");
+		(void)printf("ERROR: IoTHubDeviceClient_LL_SetMessageCallback..........FAILED!\r\n");
 	}
 
 	result->on_ack = device_on_ack;
@@ -316,7 +317,7 @@ struct device *device_type_create(const char *connectionString) {
 void *device_type_destroy(struct device * device) {
 
 	// Clean up the iothub sdk handle
-	IoTHubClient_LL_Destroy(device->iothub_ll_handle);
+	IoTHubDeviceClient_LL_Destroy(device->device_ll_handle);
 
 	Map_Destroy(device->message_properties);
 	Map_Destroy(device->system_properties);
@@ -506,7 +507,7 @@ IOTHUB_MESSAGE_RESULT device_post_message(struct device *self, const char *messa
 	if (message_id)
 		*message_id = ack->message_Id;
 
-	IoTHubClient_LL_SendEventAsync(self->iothub_ll_handle, message_handle, message_ack, (void *)ack);
+	IoTHubDeviceClient_LL_SendEventAsync(self->device_ll_handle, message_handle, message_ack, (void *)ack);
 
 	IoTHubMessage_Destroy(message_handle);
 
@@ -650,5 +651,5 @@ IOTHUB_MESSAGE_RESULT device_set_receive_handler(struct device* self, receive_me
 
 void device_flush(struct device* self) {
 
-	IoTHubClient_LL_DoWork(self->iothub_ll_handle);
+	IoTHubDeviceClient_LL_DoWork(self->device_ll_handle);
 }

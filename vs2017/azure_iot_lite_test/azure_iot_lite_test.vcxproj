@@ -53,7 +53,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsC</CompileAs>
@@ -83,8 +84,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>azure_iot_lite.lib;rpcrt4.lib;crypt32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\dist\windows\azure_iot_lite\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>rpcrt4.lib;crypt32.lib;advapi32.lib;parson.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\dist\windows\azure_iot_lite\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories);C:\work\oss\me\azure-iot-lite\azure-iot-lite-c\vs2017\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.8\build\native\Win32\Debug</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -146,70 +147,30 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\ZERO_CHECK.vcxproj">
-      <Project>{BF7C3419-A23F-30D3-894F-23CBD9365789}</Project>
-      <Name>ZERO_CHECK</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\c-utility\aziotsharedutil.vcxproj">
-      <Project>{4A7E73FB-C403-3F84-A689-A7372977C4F6}</Project>
-      <Name>aziotsharedutil</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client.vcxproj">
-      <Project>{C2950F8F-09A0-373C-A52D-70C998718A46}</Project>
-      <Name>iothub_client</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_amqp_transport.vcxproj">
-      <Project>{48102243-4A21-35BF-81EB-8F9F5855AAAA}</Project>
-      <Name>iothub_client_amqp_transport</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_amqp_ws_transport.vcxproj">
-      <Project>{4827D21B-CEE1-3399-88F1-CC4C43284E30}</Project>
-      <Name>iothub_client_amqp_ws_transport</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_http_transport.vcxproj">
-      <Project>{D2C372FB-73D0-358B-B3FB-D1241B46B31E}</Project>
-      <Name>iothub_client_http_transport</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_mqtt_transport.vcxproj">
-      <Project>{A1C038E9-1865-38F2-9591-587F21CA60D7}</Project>
-      <Name>iothub_client_mqtt_transport</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\iothub_client\iothub_client_mqtt_ws_transport.vcxproj">
-      <Project>{EE57F64E-F446-3B93-9190-CA84F4DE6B8D}</Project>
-      <Name>iothub_client_mqtt_ws_transport</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\uamqp\uamqp.vcxproj">
-      <Project>{1DCCAB97-7715-34CE-BEA6-F52D5E68A4B6}</Project>
-      <Name>uamqp</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\work\oss\azure-iot-sdk-c\cmake\umqtt\umqtt.vcxproj">
-      <Project>{001830A6-8562-3A6B-BE59-DA31B22EA3BC}</Project>
-      <Name>umqtt</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\tests\azure_iot_lite_test.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\tests\connection_string.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.Azure.C.SharedUtility.1.1.0\build\native\Microsoft.Azure.C.SharedUtility.targets" Condition="Exists('..\packages\Microsoft.Azure.C.SharedUtility.1.1.0\build\native\Microsoft.Azure.C.SharedUtility.targets')" />
-    <Import Project="..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.0\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets" Condition="Exists('..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.0\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets')" />
-    <Import Project="..\packages\Microsoft.Azure.uamqp.1.1.0\build\native\Microsoft.Azure.uamqp.targets" Condition="Exists('..\packages\Microsoft.Azure.uamqp.1.1.0\build\native\Microsoft.Azure.uamqp.targets')" />
-    <Import Project="..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.0\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets" Condition="Exists('..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.0\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets')" />
+    <Import Project="..\packages\Microsoft.Azure.C.SharedUtility.1.1.8\build\native\Microsoft.Azure.C.SharedUtility.targets" Condition="Exists('..\packages\Microsoft.Azure.C.SharedUtility.1.1.8\build\native\Microsoft.Azure.C.SharedUtility.targets')" />
+    <Import Project="..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.8\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets" Condition="Exists('..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.8\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets')" />
+    <Import Project="..\packages\Microsoft.Azure.uamqp.1.2.8\build\native\Microsoft.Azure.uamqp.targets" Condition="Exists('..\packages\Microsoft.Azure.uamqp.1.2.8\build\native\Microsoft.Azure.uamqp.targets')" />
+    <Import Project="..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.8\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets" Condition="Exists('..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.8\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets')" />
+    <Import Project="..\packages\Paloukari.Azure.IoT.Lite.C.0.0.7\build\native\Paloukari.Azure.IoT.Lite.C.targets" Condition="Exists('..\packages\Paloukari.Azure.IoT.Lite.C.0.0.7\build\native\Paloukari.Azure.IoT.Lite.C.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Azure.C.SharedUtility.1.1.0\build\native\Microsoft.Azure.C.SharedUtility.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.C.SharedUtility.1.1.0\build\native\Microsoft.Azure.C.SharedUtility.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.0\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.0\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Azure.uamqp.1.1.0\build\native\Microsoft.Azure.uamqp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.uamqp.1.1.0\build\native\Microsoft.Azure.uamqp.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.0\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.0\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.C.SharedUtility.1.1.8\build\native\Microsoft.Azure.C.SharedUtility.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.C.SharedUtility.1.1.8\build\native\Microsoft.Azure.C.SharedUtility.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.8\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.IoTHub.IoTHubClient.1.2.8\build\native\Microsoft.Azure.IoTHub.IoTHubClient.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.uamqp.1.2.8\build\native\Microsoft.Azure.uamqp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.uamqp.1.2.8\build\native\Microsoft.Azure.uamqp.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.8\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.IoTHub.AmqpTransport.1.2.8\build\native\Microsoft.Azure.IoTHub.AmqpTransport.targets'))" />
+    <Error Condition="!Exists('..\packages\Paloukari.Azure.IoT.Lite.C.0.0.7\build\native\Paloukari.Azure.IoT.Lite.C.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Paloukari.Azure.IoT.Lite.C.0.0.7\build\native\Paloukari.Azure.IoT.Lite.C.targets'))" />
   </Target>
 </Project>
